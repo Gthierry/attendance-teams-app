@@ -1,0 +1,62 @@
+version: '3.9'
+
+services:
+  # Base de données SQL Server 2022
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: attendance-sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "YourPassword123!"
+      MSSQL_PID: "Developer"
+      MSSQL_DB: "attendance"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+      - ./init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'YourPassword123!' -Q 'SELECT 1' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    restart: unless-stopped
+
+  # Backend API Node.js
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: attendance-backend
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: "sqlserver://sqlserver:1433;database=attendance;user=sa;password=YourPassword123!;trustServerCertificate=true"
+      FRONTEND_URL: "http://localhost:3001"
+    ports:
+      - "3000:3000"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Bot Teams
+  bot:
+    build:
+      context: ../bot
+      dockerfile: Dockerfile
+    container_name: attendance-bot
+    environment:
+      NODE_ENV: development
+      BOT_PORT: 3978
+      BACKEND_URL: "http://backend:3000"
+    ports:
+      - "3978:3978"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  sqlserver_data:
+    driver: local
