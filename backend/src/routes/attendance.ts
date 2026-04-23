@@ -1,5 +1,4 @@
 import { Router, Response } from 'express';
-import { v4 as uuidv4 } from 'uuid';
 import { authMiddleware, AuthenticatedRequest } from '../middleware/authMiddleware';
 import { PrismaClient } from '@prisma/client';
 import { io } from '../index';

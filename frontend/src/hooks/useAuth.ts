@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import * as microsoftTeams from '@microsoft/teams-js';
-import { PublicClientApplication, AccountInfo } from '@azure/msal-browser';
 
 interface UserInfo {
   id: string;

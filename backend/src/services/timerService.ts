@@ -29,10 +29,13 @@ export const scheduleSessionExpiry = (
       console.log(`⏰ Session ${sessionId} expirée`);
 
       // Mettre à jour la session comme expirée
-      await prisma.session.updateMany({
-        where: { id: sessionId, closedAt: null },
-        data: { closedAt: new Date() },
-      });
+      const session = await prisma.session.findUnique({ where: { id: sessionId } });
+      if (session && !session.closedAt) {
+        await prisma.session.update({
+          where: { id: sessionId },
+          data: { closedAt: new Date() },
+        });
+      }
 
       // Notifier les clients connectés
       io.to(`session:${sessionId}`).emit('session:expired');

@@ -1,6 +1,5 @@
 import {
   ActivityHandler,
-  BotState,
   TurnContext,
   CardFactory,
   MessageFactory,

@@ -41,7 +41,6 @@ const App: React.FC = () => {
   const styles = useStyles();
   const { isLoading, isAuthenticated, isTeacher, error, userInfo } = useAuth();
   const [activeSession, setActiveSession] = useState<ActiveSession | null>(null);
-  const [selectedUE, setSelectedUE] = useState<{ id: string; name: string } | null>(null);
 
   // Déterminer si l'on est dans le contexte d'une confirmation de présence
   const urlParams = new URLSearchParams(window.location.search);
@@ -106,13 +105,11 @@ const App: React.FC = () => {
           ueName={activeSession.ueName}
           onClose={() => {
             setActiveSession(null);
-            setSelectedUE(null);
           }}
         />
       ) : (
         <UEList
           onStartSession={(ueId, ueName, sessionId) => {
-            setSelectedUE({ id: ueId, name: ueName });
             setActiveSession({ sessionId, ueId, ueName });
           }}
         />

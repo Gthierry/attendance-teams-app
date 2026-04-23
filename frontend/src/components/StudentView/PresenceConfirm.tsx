@@ -98,19 +98,19 @@ const PresenceConfirm: React.FC<Props> = ({ sessionId, userInfo }) => {
       } catch {
         // Ignore si pas dans un contexte Teams Dialog
       }
-    } catch (err: any) {
-      if (err.response?.status === 410) {
+    } catch (err: unknown) {
+      const axiosError = err as { response?: { status?: number } };
+      if (axiosError.response?.status === 410) {
         setState('expired');
         setErrorMessage('La fenêtre de présence de 5 minutes est expirée.');
-      } else if (err.response?.status === 409) {
+      } else if (axiosError.response?.status === 409) {
         setState('error');
         setErrorMessage('Vous avez déjà déclaré votre présence pour cette session.');
       } else {
         setState('error');
         setErrorMessage('Une erreur est survenue. Veuillez réessayer.');
       }
-      console.error('Erreur lors de la déclaration de présence:', err);
-    }
+      console.error('Erreur lors de la déclaration de présence:', err);    }
   };
 
   if (state === 'success') {

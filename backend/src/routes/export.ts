@@ -47,13 +47,12 @@ router.get('/:sessionId', authMiddleware, async (req: AuthenticatedRequest, res:
     ];
 
     // Style de l'en-tête
-    worksheet.getRow(1).font = { bold: true };
+    worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
     worksheet.getRow(1).fill = {
       type: 'pattern',
       pattern: 'solid',
       fgColor: { argb: 'FF4472C4' },
     };
-    worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
 
     // Ajouter les données de présences
     session.attendances.forEach((attendance) => {
