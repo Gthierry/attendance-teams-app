@@ -1,0 +1,43 @@
+// Prisma schema pour l'application de gestion des présences Teams
+// Base de données: SQL Server
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+// Sessions de présence - une par cours lancé par un professeur
+model Session {
+  id         String    @id @default(uuid())
+  ueId       String    @map("ue_id")
+  ueName     String    @map("ue_name")
+  profId     String    @map("prof_id")
+  startedAt  DateTime  @default(now()) @map("started_at")
+  expiresAt  DateTime  @map("expires_at")
+  closedAt   DateTime? @map("closed_at")
+
+  // Relation vers les présences enregistrées
+  attendances Attendance[]
+
+  @@map("sessions")
+}
+
+// Présences enregistrées par les étudiants
+model Attendance {
+  id           String   @id @default(uuid())
+  sessionId    String   @map("session_id")
+  studentId    String   @map("student_id")
+  studentName  String   @map("student_name")
+  studentEmail String   @map("student_email")
+  declaredAt   DateTime @default(now()) @map("declared_at")
+
+  // Relation vers la session parente
+  session Session @relation(fields: [sessionId], references: [id])
+
+  @@unique([sessionId, studentId], name: "UQ_attendance_per_session")
+  @@map("attendances")
+}

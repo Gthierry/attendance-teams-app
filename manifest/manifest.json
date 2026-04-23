@@ -1,0 +1,79 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.17/MicrosoftTeams.AppManifest.schema.json",
+  "manifestVersion": "1.17",
+  "version": "1.0.0",
+  "id": "{{TEAMS_APP_ID}}",
+  "packageName": "com.yourorg.attendance-teams",
+  "developer": {
+    "name": "Votre Organisation",
+    "websiteUrl": "https://yourapp.example.com",
+    "privacyUrl": "https://yourapp.example.com/privacy",
+    "termsOfUseUrl": "https://yourapp.example.com/terms"
+  },
+  "icons": {
+    "color": "color.png",
+    "outline": "outline.png"
+  },
+  "name": {
+    "short": "Présences",
+    "full": "Gestion des présences universitaires"
+  },
+  "description": {
+    "short": "Gérez les présences de vos cours en temps réel",
+    "full": "Application Teams permettant aux professeurs de gérer les présences de leurs cours. Les étudiants confirment leur présence via une Adaptive Card et le professeur visualise les résultats en temps réel."
+  },
+  "accentColor": "#4472C4",
+  "staticTabs": [
+    {
+      "entityId": "attendance-tab",
+      "name": "Présences",
+      "contentUrl": "{{FRONTEND_URL}}",
+      "websiteUrl": "{{FRONTEND_URL}}",
+      "scopes": ["personal", "team"]
+    }
+  ],
+  "bots": [
+    {
+      "botId": "{{BOT_ID}}",
+      "scopes": ["team", "groupChat"],
+      "supportsFiles": false,
+      "isNotificationOnly": false,
+      "commandLists": [
+        {
+          "scopes": ["team"],
+          "commands": [
+            {
+              "title": "Aide",
+              "description": "Afficher l'aide du bot de présences"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "permissions": [
+    "identity",
+    "messageTeamMembers"
+  ],
+  "validDomains": [
+    "{{APP_DOMAIN}}"
+  ],
+  "webApplicationInfo": {
+    "id": "{{AZURE_CLIENT_ID}}",
+    "resource": "api://{{APP_DOMAIN}}/{{AZURE_CLIENT_ID}}"
+  },
+  "authorization": {
+    "permissions": {
+      "resourceSpecific": [
+        {
+          "name": "ChannelMessage.Send.Group",
+          "type": "Application"
+        },
+        {
+          "name": "ChatMessage.Send.Chat",
+          "type": "Application"
+        }
+      ]
+    }
+  }
+}
