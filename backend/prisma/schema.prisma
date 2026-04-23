@@ -38,6 +38,6 @@ model Attendance {
   // Relation vers la session parente
   session Session @relation(fields: [sessionId], references: [id])
 
-  @@unique([sessionId, studentId])
+  @@unique([sessionId, studentId], name: "UQ_attendance_per_session")
   @@map("attendances")
 }

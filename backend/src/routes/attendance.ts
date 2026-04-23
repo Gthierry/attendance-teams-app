@@ -146,7 +146,7 @@ router.post('/declare', authMiddleware, async (req: AuthenticatedRequest, res: R
 
     // Vérifier si l'étudiant a déjà déclaré sa présence
     const existing = await prisma.attendance.findUnique({
-      where: { sessionId_studentId: { sessionId, studentId } },
+      where: { UQ_attendance_per_session: { sessionId, studentId } },
     });
 
     if (existing) {

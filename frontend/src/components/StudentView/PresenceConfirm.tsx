@@ -110,7 +110,8 @@ const PresenceConfirm: React.FC<Props> = ({ sessionId, userInfo }) => {
         setState('error');
         setErrorMessage('Une erreur est survenue. Veuillez réessayer.');
       }
-      console.error('Erreur lors de la déclaration de présence:', err);    }
+      console.error('Erreur lors de la déclaration de présence:', err);
+    }
   };
 
   if (state === 'success') {
